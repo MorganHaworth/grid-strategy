@@ -18,6 +18,14 @@ class GridStrategy(metaclass=ABCMeta):
     def __init__(self, alignment="center"):
         self.alignment = alignment
 
+    def get_grid_aspect(self, n, w, h):
+        """
+        Return a list of axes designed according to the Rectangular strategy aspect ratio.
+        """
+
+        grid_arrangement = self.get_grid_arrangement_by_aspect_ratio(n, w, h)
+        return self.get_gridspec(grid_arrangement)
+
     def get_grid(self, n):
         """  
         Return a list of axes designed according to the strategy.
@@ -32,6 +40,11 @@ class GridStrategy(metaclass=ABCMeta):
 
         grid_arrangement = self.get_grid_arrangement(n)
         return self.get_gridspec(grid_arrangement)
+
+    @classmethod
+    @abstractmethod
+    def get_grid_arrangement_by_aspect_ratio(cls, n, w, h):  # pragma: nocover
+        pass
 
     @classmethod
     @abstractmethod

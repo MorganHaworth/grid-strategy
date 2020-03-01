@@ -214,7 +214,37 @@ class SquareStrategy(GridStrategy):
 
 
 class RectangularStrategy(GridStrategy):
-    """Provide a nearest-to-square rectangular grid."""
+    """Provide a nearest-to-square or nearest-to-aspect-ratio rectangular grid."""
+
+    @classmethod
+    def get_grid_arrangement_by_aspect_ratio(cls, n, w, h):
+        """
+        Retrieves the grid arrangement that is the nearest-to-aspect-ratio
+        rectangular arrangement of plots
+
+        :param n:
+            The number of subplots in the plot.
+
+        :param w:
+            The width aspect ratio for the grid
+
+        :param h:
+            The height aspect ratio for the grid
+        """
+        # May not work for very large n because of the float sqrt
+        # Get the two closest factors (may have problems for very large n)
+        ratio = w / h
+        closest = n
+        x, y = n, 1
+        for i in range(n, 1, -1):
+            if n % i == 0:
+                currRatio = (n // i) / i
+                if (abs(currRatio - ratio) < closest):
+                    closest = abs(currRatio-ratio)
+                    x, y = n//i, i
+        # Convert this into a grid arrangement
+        return tuple(x for i in range(y))
+
 
     @classmethod
     def get_grid_arrangement(cls, n):
